@@ -1,7 +1,6 @@
 // Импорты
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
@@ -9,6 +8,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import startServer from './db.js';
+import { register } from './controllers/auth.js';
 
 // Константы
 const __filename = fileURLToPath(import.meta.url);
@@ -39,4 +40,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Дальше — роуты, запуск сервера и т.д.
+// Routes
+app.post('/auth/register', upload.single('picture', register) )
+
+startServer(app);
