@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import startServer from './db.js';
 import { register } from './controllers/auth.js';
+import authRoutes from './routes/auth.js'
 
 // Константы
 const __filename = fileURLToPath(import.meta.url);
@@ -42,5 +43,7 @@ const upload = multer({ storage });
 
 // Routes
 app.post('/auth/register', upload.single('picture'), register);
+
+app.use('/auth', authRoutes)
 
 startServer(app);

@@ -1,4 +1,3 @@
-import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/Users.js';
@@ -47,3 +46,35 @@ export const register = async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера при регистрации пользователя' });
   }
 };
+
+export const login = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // Поиск пользователя по email
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: 'Пользователь не найден' });
+      }
+  
+      // Проверка пароля
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Неверный пароль' });
+      }
+  
+      // Генерация токена
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      });
+  
+      // Удалим пароль из ответа
+      const userWithoutPassword = { ...user._doc };
+      delete userWithoutPassword.password;
+  
+      res.status(200).json({ token, user: userWithoutPassword });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Ошибка сервера при входе' });
+    }
+  };
