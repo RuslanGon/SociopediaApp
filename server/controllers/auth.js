@@ -78,3 +78,13 @@ export const login = async (req, res) => {
       res.status(500).json({ message: 'Ошибка сервера при входе' });
     }
   };
+
+  export const getAllUsers = async (req, res) => {
+    try {
+      const users = await UserModel.find().select('-password'); 
+      res.status(200).json(users);
+    } catch (error) {
+      console.error('Ошибка при получении пользователей:', error);
+      res.status(500).json({ message: 'Ошибка сервера при получении пользователей' });
+    }
+  };
