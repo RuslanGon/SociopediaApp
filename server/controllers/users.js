@@ -39,36 +39,33 @@ export const getUser = async (req, res) => {
       const { id, friendsId } = req.params;
   
       // Проверка на валидный ObjectId
-      if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(friendsId)) {
-        return res.status(400).json({ message: 'Некорректный ID пользователя или друга' });
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Некорректный ID пользователя' });
       }
   
       const user = await UserModel.findById(id);
-      const friend = await UserModel.findById(friendsId);
+      const friend = await UserModel.findOne({ email: friendsId }); // Ищем друга по email
   
       if (!user || !friend) {
         return res.status(404).json({ message: 'Пользователь или друг не найден' });
       }
   
-      const isFriend = user.friends.includes(friendsId);
+      const isFriend = user.friends.includes(friend.email);
   
       if (isFriend) {
         // Удаляем друга у обоих
-        user.friends = user.friends.filter(fId => fId.toString() !== friendsId);
-        friend.friends = friend.friends.filter(fId => fId.toString() !== id);
+        user.friends = user.friends.filter(email => email !== friendsId);
+        friend.friends = friend.friends.filter(email => email !== user.email);
       } else {
         // Добавляем друга обоим
         user.friends.push(friendsId);
-        friend.friends.push(id);
+        friend.friends.push(user.email);
       }
   
       await user.save();
       await friend.save();
   
-      // Получаем список друзей с их данными
-      const friends = await UserModel.find({ _id: { $in: user.friends } });
-  
-      res.status(200).json(friends);
+      res.status(200).json({ message: 'Друзья обновлены' });
   
     } catch (error) {
       console.error('Ошибка добавления/удаления друга:', error.message);
