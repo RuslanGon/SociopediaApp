@@ -95,21 +95,28 @@ export const getUserPosts = async (req, res) => {
 
       export const patchPost = async (req, res) => {
         try {
-          const { id } = req.params;  // Получаем ID из URL
-          const post = await PostModel.findById(id);  // Ищем пост по ID
-          
+          const { id } = req.params;  
+          const post = await PostModel.findById(id);  
+      
           if (!post) {
             return res.status(404).json({ message: "Пост не найден" });
           }
-          
-          post.description = req.body.description || post.description;
-          post.location = req.body.location || post.location;
-          
+      
+          const { description, location, picturePath, userPicturePath, likes, comments } = req.body;
+      
+          if (description) post.description = description;
+          if (location) post.location = location;
+          if (picturePath) post.picturePath = picturePath;
+          if (userPicturePath) post.userPicturePath = userPicturePath;
+          if (likes) post.likes = likes;
+          if (comments) post.comments = comments;
+      
           await post.save();
-          
-          res.status(200).json(post);  
+      
+          res.status(200).json(post);
         } catch (error) {
           console.error(error);
           res.status(500).json({ message: 'Ошибка при обновлении поста', error: error.message });
         }
       };
+          
