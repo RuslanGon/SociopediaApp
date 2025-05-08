@@ -12,6 +12,9 @@ import startServer from './db.js';
 import { register } from './controllers/auth.js';
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
+import postRoutes from './routes/post.js'
+import { verifyToken } from './middleware/auth.js';
+import { createPost } from './controllers/posts.js';
 
 // Константы
 const __filename = fileURLToPath(import.meta.url);
@@ -44,8 +47,10 @@ const upload = multer({ storage });
 
 // Routes
 app.post('/auth/register', upload.single('picture'), register);
+app.post('/posts', verifyToken, upload.single('picture'), createPost)
 
 app.use('/auth', authRoutes)
 app.use('/users', userRoutes)
+app.use('/posts', postRoutes)
 
 startServer(app);
