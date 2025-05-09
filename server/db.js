@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import UserModel from './models/Users.js'
+import PostModel from './models/Post.js';
+import { users, posts } from './data/index.js'
 
 dotenv.config();
 
@@ -10,6 +13,14 @@ const startServer = async (app) => {
 
     await mongoose.connect(MONGODB_URI);
     console.log('✅ MongoDB connected successfully');
+
+    // Вставка данных до запуска сервера
+    const existingUsers = await UserModel.find();
+    if (existingUsers.length === 0) {
+      await UserModel.insertMany(users);
+      await PostModel.insertMany(posts);
+      console.log('📦 Test data inserted');
+    }
 
     app.listen(PORT, () => {
       console.log(`✅ Server is running on port ${PORT}`);
