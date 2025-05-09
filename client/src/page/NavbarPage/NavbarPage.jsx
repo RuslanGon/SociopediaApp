@@ -21,10 +21,14 @@ import {
   Close,
 } from "@mui/icons-material";
 import FlexBetween from '../../../components/FlexBetween.jsx'
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const NavbarPage = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const user = useSelector(state => state.auth.user)
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const theme = useTheme();
@@ -34,7 +38,7 @@ const NavbarPage = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-
+  // const fullName = `${user.firstName} ${user.lastName}`;
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
