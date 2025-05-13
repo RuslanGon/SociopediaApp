@@ -21,14 +21,14 @@ import {
     picturePath,
     userPicturePath,
     likes,
-    comments,
+    comments = [],
   }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
-    const loggedInUserId = useSelector((state) => state.user._id);
+    const loggedInUserId = useSelector((state) => state.auth.user._id);
     const isLiked = Boolean(likes[loggedInUserId]);
-    const likeCount = Object.keys(likes).length;
+    const likeCount = Object.keys(likes || {}).length;
   
     const { palette } = useTheme();
     const main = palette.neutral.main;
