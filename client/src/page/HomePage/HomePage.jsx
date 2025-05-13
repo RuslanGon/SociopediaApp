@@ -1,8 +1,11 @@
+import NavbarPage from '../NavbarPage/NavbarPage.jsx'
 import React from 'react'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <box>
+      {/* < NavbarPage /> */}
+    </box>
   )
 }
 
