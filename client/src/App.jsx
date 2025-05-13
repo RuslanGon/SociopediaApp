@@ -11,7 +11,6 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import NavbarPage from './page/NavbarPage/NavbarPage.jsx';
 
-
 const App = () => {
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
