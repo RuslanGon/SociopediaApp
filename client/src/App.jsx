@@ -15,7 +15,8 @@ import NavbarPage from './page/NavbarPage/NavbarPage.jsx';
 const App = () => {
   const mode = useSelector(state => state.auth.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
-  
+  const isAuth = Boolean(useSelector((state) => state.auth.token));
+
   return (
     <div className='app'>
       <ThemeProvider theme={theme}>
@@ -23,7 +24,7 @@ const App = () => {
         <NavbarPage />
       <Routes>
         <Route path='/' element={<LoginPage />} />
-        <Route path='/home' element={<HomePage />} />
+        <Route path='/home' element={isAuth ? <HomePage /> : <LoginPage />} />
         <Route path='/profile/:userId' element={<ProfilePage />} />
       </Routes>
       </ThemeProvider>
