@@ -23,6 +23,7 @@ import {
 import FlexBetween from '../../../components/FlexBetween.jsx'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setMode } from "../../../state/index.js";
 
 const NavbarPage = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -35,10 +36,10 @@ const NavbarPage = () => {
   const neutralLight = theme.palette.neutral.light;
   const dark = theme.palette.neutral.dark;
   const background = theme.palette.background.default;
-  const primaryLight = theme.palette.primary.light;
+  // const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  // const fullName = `${user.firstName} ${user.lastName}`;
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "Гость";
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -50,7 +51,7 @@ const NavbarPage = () => {
 
           sx={{
             "&:hover": {
-              color: primaryLight,
+              color: "gold",
               cursor: "pointer",
             },
           }}
@@ -75,7 +76,7 @@ const NavbarPage = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
-          <IconButton>
+          <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
@@ -87,6 +88,7 @@ const NavbarPage = () => {
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" >
             <Select
+            value={fullName}
 
               
               input={<InputBase />}
