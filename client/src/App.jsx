@@ -25,7 +25,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<LoginPage />} />
         <Route path='/home' element={isAuth ? <HomePage /> : <LoginPage />} />
-        <Route path='/profile/:userId' element={<ProfilePage />} />
+        <Route path='/profile/:userId' element={isAuth ? <ProfilePage /> : <LoginPage />} />
       </Routes>
       </ThemeProvider>
     </div>
