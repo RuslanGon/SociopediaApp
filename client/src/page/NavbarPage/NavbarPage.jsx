@@ -23,7 +23,7 @@ import {
 import FlexBetween from '../../../components/FlexBetween.jsx'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setMode } from "../../../state/index.js";
+import { setLogout, setMode } from "../../../state/index.js";
 
 const NavbarPage = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -44,7 +44,7 @@ const NavbarPage = () => {
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       <FlexBetween gap="1.75rem">
-        <Typography
+        <Typography   onClick={() => navigate("/home")}
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           color="primary"
@@ -89,14 +89,28 @@ const NavbarPage = () => {
           <FormControl variant="standard" >
             <Select
             value={fullName}
-
-              
+            sx={{
+              backgroundColor: neutralLight,
+              width: "150px",
+              borderRadius: "0.25rem",
+              p: "0.25rem 1rem",
+              "& .MuiSvgIcon-root": {
+                pr: "0.25rem",
+                width: "3rem",
+              },
+              "& .MuiSelect-select:focus": {
+                backgroundColor: neutralLight,
+              },
+            }}
+            
               input={<InputBase />}
             >
-              <MenuItem >
-                <Typography></Typography>
+              <MenuItem value={fullName}>
+                <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem >Log Out</MenuItem>
+              <MenuItem
+              onClick={() => dispatch(setLogout())}
+              >Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -138,7 +152,7 @@ const NavbarPage = () => {
             gap="3rem"
           >
             <IconButton
-
+              onClick={() => dispatch(setMode())}
               sx={{ fontSize: "25px" }}
             >
               {theme.palette.mode === "dark" ? (
@@ -150,9 +164,9 @@ const NavbarPage = () => {
             <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} />
-            <FormControl variant="standard" >
+            <FormControl variant="standard" value={fullName}>
               <Select
-                
+                value={fullName}
                 sx={{
                   backgroundColor: neutralLight,
                   width: "150px",
@@ -168,10 +182,10 @@ const NavbarPage = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem >
-                  <Typography></Typography>
+                <MenuItem value={fullName}>
+                  <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem >
+                <MenuItem onClick={() => dispatch(setLogout())}>
                   Log Out
                 </MenuItem>
               </Select>
